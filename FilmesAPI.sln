@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessRulesContracts", "BusinessRules\BusinessRulesContracts.csproj", "{9C7CE2EF-51E1-4643-BFD6-90CAF06F1836}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessRulesImpl", "BusinessRulesImpl\BusinessRulesImpl.csproj", "{D3393D7A-A900-4889-954B-601116A7A97A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessRulesImpl", "BusinessRulesImpl\BusinessRulesImpl.csproj", "{D3393D7A-A900-4889-954B-601116A7A97A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "Repositories\Repositories.csproj", "{605F40DE-31C7-48E3-81F3-7067369323A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositories", "Repositories\Repositories.csproj", "{605F40DE-31C7-48E3-81F3-7067369323A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exceptions", "Exceptions\Exceptions.csproj", "{5D424BC3-537E-4EE7-A8C0-906A71CB86AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exceptions", "Exceptions\Exceptions.csproj", "{5D424BC3-537E-4EE7-A8C0-906A71CB86AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

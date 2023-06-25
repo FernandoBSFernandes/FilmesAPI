@@ -1,8 +1,6 @@
 ﻿using BusinessRulesContracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace APIProject.Controllers
 {
     [Route("[controller]")]
@@ -30,11 +28,11 @@ namespace APIProject.Controllers
         }
 
         [HttpPost("/incluir")]
-        public void Incluir([FromBody] string value)
+        public void Include([FromBody] string value)
         {
         }
 
-        [HttpPut("/atualizar")]
+        [HttpPut("/atualizar/{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }

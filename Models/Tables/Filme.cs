@@ -1,5 +1,4 @@
-﻿using Models.DTOs.Objects;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.Tables
@@ -10,10 +9,22 @@ namespace Models.Tables
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("idFilme", TypeName = "bigint")]
         public long Id { get; set; }
         
+        [Column("nome"), MaxLength(60), Required(AllowEmptyStrings = false)]
         public string Nome { get; set; }
-        public string Diretor { get; set; }
-        public decimal Duracao { get; set; }
+
+        [Column("duracao"), Timestamp, Required]
+        public DateTime Duracao { get; set; }
+
+        [Column("ano"), Range(1900, 3000)]
+        public int Ano { get; set; }
+        
+        [Column("diretor"), Required]
+        public List<Diretor> Diretores { get; set; }
+
+        [Column("estilo"), Required]
         public EstiloFilme Estilo { get; set; }
+        
+        [Column("ator"), Required]
         public List<Ator> Atores { get; set; }
     }
 }
