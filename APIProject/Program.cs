@@ -1,4 +1,5 @@
 using BusinessRulesContracts.Interfaces;
+using BusinessRulesImpl;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Context;
 
@@ -40,5 +41,5 @@ app.Run();
 
 static void SetDI(WebApplicationBuilder builder)
 {
-    builder.Services.AddTransient<IRetornaTodosFilmesBO>();
+    builder.Services.AddTransient<IRetornaTodosFilmesBO, RetornaTodosFilmesBO>();
 }
