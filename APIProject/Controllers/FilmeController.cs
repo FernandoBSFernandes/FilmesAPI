@@ -1,5 +1,6 @@
 ﻿using BusinessRulesContracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Models.DTOs.Response;
 
 namespace APIProject.Controllers
 {
@@ -16,9 +17,9 @@ namespace APIProject.Controllers
         }
 
         [HttpGet("/obtertodos")]
-        public IEnumerable<string> GetAll()
+        public RetornaTodosFilmesResponseDTO GetAll()
         {
-            return new string[] { "value1", "value2" };
+            return retornaTodosFilmesBO.RetornaTodosFilmes();
         }
 
         [HttpGet("/obter/{id}")]
