@@ -1,3 +1,4 @@
+using BusinessRulesContracts.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Context;
 
@@ -6,14 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-string connectionStringSQLServer = builder.Configuration.GetConnectionString("DefaultSQLServerStringConnection");
+//Adding AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //Adding DBContexts
+string connectionStringSQLServer = builder.Configuration.GetConnectionString("DefaultSQLServerStringConnection");
 builder.Services.AddDbContext<FilmeContext>(settings => settings.UseSqlServer(connectionStringSQLServer));
 
 SetDI(builder);
@@ -37,5 +40,5 @@ app.Run();
 
 static void SetDI(WebApplicationBuilder builder)
 {
-    //builder.Services.AddTransient();
+    builder.Services.AddTransient<IRetornaTodosFilmesBO>();
 }

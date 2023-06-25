@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessRulesContracts.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,6 +9,14 @@ namespace APIProject.Controllers
     [ApiController]
     public class FilmeController : ControllerBase
     {
+
+        private readonly IRetornaTodosFilmesBO retornaTodosFilmesBO;
+
+        public FilmeController(IRetornaTodosFilmesBO retornaTodosFilmesBO)
+        {
+            this.retornaTodosFilmesBO = retornaTodosFilmesBO;
+        }
+
         [HttpGet("/obtertodos")]
         public IEnumerable<string> GetAll()
         {
