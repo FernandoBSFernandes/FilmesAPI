@@ -2,16 +2,17 @@
 using BusinessRulesContracts.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Models.DTOs.Response;
+using Models.ErrorObject;
 using Repositories.Context;
 using System.Net;
 
 using FilmesFromDTO = Models.DTOs.Objects.Filme;
 using FilmesFromDB = Models.Tables.Filme;
-using Models.ErrorObject;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessRulesImpl
 {
-    public class RetornaTodosFilmesBO : IRetornaTodosFilmesBO
+    public class RetornaTodosFilmesBO : IRetornaFilmesBO
     {
 
         private readonly FilmeContext context;
@@ -25,6 +26,27 @@ namespace BusinessRulesImpl
             this.mapper = mapper;
         }
 
+        public RetornaFilmeResponseDTO RetornaFilmePorId(long id)
+        {
+            RetornaFilmeResponseDTO response;
+
+            try
+            {
+                var filmeEncontrado = context.Filme.Where(filme => filme.Id == id)
+                    .Include(filme => filme.Diretores).Include(filme => filme.Atores).Include(filme => filme.Estilo)
+                    .FirstOrDefault();
+                
+                response = filmeEncontrado is null ? new RetornaFilmeResponseDTO() : 
+                    new RetornaFilmeResponseDTO(HttpStatusCode.OK, mapper.Map<FilmesFromDTO>(filmeEncontrado));
+            }
+            catch (Exception e)
+            {
+                response = new RetornaFilmeResponseDTO(HttpStatusCode.InternalServerError, new Erro(e.Message));
+            }
+
+            return response;
+        }
+
         public RetornaTodosFilmesResponseDTO RetornaTodosFilmes()
         {
             RetornaTodosFilmesResponseDTO response;
@@ -33,7 +55,7 @@ namespace BusinessRulesImpl
             {
                 var filmes = context.Filme.ToList();
 
-                if(!filmes.Any())
+                if (!filmes.Any())
                     filmes = Enumerable.Empty<FilmesFromDB>().ToList();
 
                 var filmesToDTO = mapper.Map<List<FilmesFromDB>, List<FilmesFromDTO>>(filmes);

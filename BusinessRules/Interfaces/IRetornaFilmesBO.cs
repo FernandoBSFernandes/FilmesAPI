@@ -2,8 +2,9 @@
 
 namespace BusinessRulesContracts.Interfaces
 {
-    public interface IRetornaTodosFilmesBO
+    public interface IRetornaFilmesBO
     {
         RetornaTodosFilmesResponseDTO RetornaTodosFilmes();
+        RetornaFilmeResponseDTO RetornaFilmePorId(long id);
     }
 }

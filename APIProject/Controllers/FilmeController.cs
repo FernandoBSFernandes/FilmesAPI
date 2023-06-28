@@ -9,10 +9,10 @@ namespace APIProject.Controllers
     public class FilmeController : ControllerBase
     {
 
-        private readonly IRetornaTodosFilmesBO retornaTodosFilmesBO;
+        private readonly IRetornaFilmesBO retornaTodosFilmesBO;
         private readonly ISalvarFilmesBO salvarFilmesBO;
 
-        public FilmeController(IRetornaTodosFilmesBO retornaTodosFilmesBO, ISalvarFilmesBO salvarFilmesBO)
+        public FilmeController(IRetornaFilmesBO retornaTodosFilmesBO, ISalvarFilmesBO salvarFilmesBO)
         {
             this.retornaTodosFilmesBO = retornaTodosFilmesBO;
             this.salvarFilmesBO = salvarFilmesBO;
@@ -26,9 +26,10 @@ namespace APIProject.Controllers
         }
 
         [HttpGet("/obter/{id}")]
-        public string GetOne(int id)
+        public ActionResult GetOne(long id)
         {
-            return "value";
+            var response = retornaTodosFilmesBO.RetornaFilmePorId(id);
+            return StatusCode((int)response.CodigoStatus, response);
         }
 
         [HttpPost("/incluir")]
