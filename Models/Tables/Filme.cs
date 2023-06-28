@@ -12,8 +12,8 @@ namespace Models.Tables
         [Column("nome"), MaxLength(60), Required(AllowEmptyStrings = false)]
         public string Nome { get; set; }
 
-        [Column("duracao"), Timestamp, Required]
-        public DateTime Duracao { get; set; }
+        [Column("duracao"), Range(60, 240), Required]
+        public int Duracao { get; set; }
 
         [Column("ano"), Range(1900, 3000)]
         public int Ano { get; set; }

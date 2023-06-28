@@ -1,6 +1,6 @@
 ﻿using BusinessRulesContracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Models.DTOs.Response;
+using Models.DTOs.Request;
 
 namespace APIProject.Controllers
 {
@@ -10,16 +10,19 @@ namespace APIProject.Controllers
     {
 
         private readonly IRetornaTodosFilmesBO retornaTodosFilmesBO;
+        private readonly ISalvarFilmesBO salvarFilmesBO;
 
-        public FilmeController(IRetornaTodosFilmesBO retornaTodosFilmesBO)
+        public FilmeController(IRetornaTodosFilmesBO retornaTodosFilmesBO, ISalvarFilmesBO salvarFilmesBO)
         {
             this.retornaTodosFilmesBO = retornaTodosFilmesBO;
+            this.salvarFilmesBO = salvarFilmesBO;
         }
 
         [HttpGet("/obtertodos")]
-        public RetornaTodosFilmesResponseDTO GetAll()
+        public ActionResult GetAll()
         {
-            return retornaTodosFilmesBO.RetornaTodosFilmes();
+            var response = retornaTodosFilmesBO.RetornaTodosFilmes();
+            return StatusCode((int)response.CodigoStatus, response);
         }
 
         [HttpGet("/obter/{id}")]
@@ -29,8 +32,11 @@ namespace APIProject.Controllers
         }
 
         [HttpPost("/incluir")]
-        public void Include([FromBody] string value)
+        public ActionResult Include([FromBody] SalvarFilmeRequestDTO request)
         {
+            var response = salvarFilmesBO.SalvarFilme(request);
+
+            return StatusCode((int)response.CodigoStatus, response);
         }
 
         [HttpPut("/atualizar/{id}")]
