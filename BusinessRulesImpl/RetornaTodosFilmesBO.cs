@@ -53,7 +53,9 @@ namespace BusinessRulesImpl
 
             try
             {
-                var filmes = context.Filme.ToList();
+                var filmes = context.Filme.
+                    Include(filme => filme.Diretores).Include(filme => filme.Atores).Include(filme => filme.Estilo).
+                    ToList();
 
                 if (!filmes.Any())
                     filmes = Enumerable.Empty<FilmesFromDB>().ToList();
