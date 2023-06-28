@@ -4,7 +4,7 @@ using Models.DTOs.Request;
 
 namespace APIProject.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class FilmeController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace APIProject.Controllers
         }
 
         [HttpGet("/obter/{id}")]
-        public ActionResult GetOne(long id)
+        public ActionResult GetOne([FromRoute] long id)
         {
             var response = retornaTodosFilmesBO.RetornaFilmePorId(id);
             return StatusCode((int)response.CodigoStatus, response);
