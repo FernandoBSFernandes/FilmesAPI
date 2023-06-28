@@ -32,7 +32,7 @@ namespace APIProject.Controllers
         }
 
         [HttpPost("/incluir")]
-        public ActionResult Include([FromBody] SalvarFilmeRequestDTO request)
+        public ActionResult Salvar([FromBody] SalvarFilmeRequestDTO request)
         {
             var response = salvarFilmesBO.SalvarFilme(request);
 

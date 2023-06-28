@@ -31,7 +31,7 @@ namespace BusinessRulesImpl
 
             try
             {
-                var filme = mapper.Map<FilmesFromDTO, FilmesFromDB>(request.DadosFilme);
+                var filme = mapper.Map<FilmesFromDB>(request.DadosFilme);
 
                 context.Filme.Add(filme);
                 context.SaveChanges();
