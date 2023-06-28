@@ -40,8 +40,14 @@ namespace APIProject.Controllers
         }
 
         [HttpPut("/atualizar/{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Atualizar(int id, [FromBody] string value)
         {
+        }
+
+        [HttpPatch]
+        public /*ActionResult*/ void AtualizarInfoFilme(int id, [FromBody] object value)
+        {
+
         }
 
         [HttpDelete("/remover/{id}")]

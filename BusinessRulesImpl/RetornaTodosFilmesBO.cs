@@ -33,6 +33,9 @@ namespace BusinessRulesImpl
             {
                 var filmes = context.Filme.ToList();
 
+                if(!filmes.Any())
+                    filmes = Enumerable.Empty<FilmesFromDB>().ToList();
+
                 var filmesToDTO = mapper.Map<List<FilmesFromDB>, List<FilmesFromDTO>>(filmes);
 
                 response = new RetornaTodosFilmesResponseDTO(HttpStatusCode.OK, filmesToDTO);
