@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Models.DTOs
 {
-    public class BaseResponseDTO
+    public abstract class BaseResponseDTO
     {
         
         public HttpStatusCode CodigoStatus { get; internal set; }

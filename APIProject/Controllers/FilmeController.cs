@@ -9,13 +9,13 @@ namespace APIProject.Controllers
     public class FilmeController : ControllerBase
     {
 
-        private readonly IRetornaFilmesBO retornaTodosFilmesBO;
+        private readonly IRetornaFilmesBO retornaFilmesBO;
         private readonly ISalvarFilmesBO salvarFilmesBO;
         private readonly IAtualizarFilmeBO atualizarFilmeBO;
 
-        public FilmeController(IRetornaFilmesBO retornaTodosFilmesBO, ISalvarFilmesBO salvarFilmesBO, IAtualizarFilmeBO atualizarFilmeBO)
+        public FilmeController(IRetornaFilmesBO retornaFilmesBO, ISalvarFilmesBO salvarFilmesBO, IAtualizarFilmeBO atualizarFilmeBO)
         {
-            this.retornaTodosFilmesBO = retornaTodosFilmesBO;
+            this.retornaFilmesBO = retornaFilmesBO;
             this.salvarFilmesBO = salvarFilmesBO;
             this.atualizarFilmeBO = atualizarFilmeBO;
         }
@@ -23,14 +23,14 @@ namespace APIProject.Controllers
         [HttpGet("/obtertodos")]
         public ActionResult GetAll()
         {
-            var response = retornaTodosFilmesBO.RetornaTodosFilmes();
+            var response = retornaFilmesBO.RetornaTodosFilmes();
             return StatusCode((int)response.CodigoStatus, response);
         }
 
         [HttpGet("/obter/{id}")]
         public ActionResult GetOne([FromRoute] long id)
         {
-            var response = retornaTodosFilmesBO.RetornaFilmePorId(id);
+            var response = retornaFilmesBO.RetornaFilmePorId(id);
             return StatusCode((int)response.CodigoStatus, response);
         }
 
