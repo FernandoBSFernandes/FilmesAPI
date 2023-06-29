@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessRulesImpl
 {
-    public class RetornaTodosFilmesBO : IRetornaFilmesBO
+    public class RetornarFilmesBO : IRetornaFilmesBO
     {
 
         private readonly FilmeContext context;
         private readonly IConfiguration config;
         private readonly IMapper mapper;
 
-        public RetornaTodosFilmesBO(FilmeContext context, IConfiguration config, IMapper mapper)
+        public RetornarFilmesBO(FilmeContext context, IConfiguration config, IMapper mapper)
         {
             this.context = context;
             this.config = config;

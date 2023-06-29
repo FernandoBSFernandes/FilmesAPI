@@ -1,12 +1,13 @@
 ﻿using Models.DTOs.Objects;
 using Models.ErrorObject;
 using System.Net;
+using System.Text.Json.Serialization;
 
 namespace Models.DTOs.Response
 {
     public class RetornaFilmeResponseDTO : BaseResponseDTO
     {
-
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Filme Filme { get; internal set; }
 
         /// <summary>

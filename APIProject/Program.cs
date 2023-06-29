@@ -42,6 +42,6 @@ app.Run();
 static void SetDI(WebApplicationBuilder builder)
 {
     builder.Services.AddTransient<IAtualizarFilmeBO, AtualizarFilmeBO>();
-    builder.Services.AddTransient<IRetornaFilmesBO, RetornaTodosFilmesBO>();
+    builder.Services.AddTransient<IRetornaFilmesBO, RetornarFilmesBO>();
     builder.Services.AddTransient<ISalvarFilmesBO, SalvarFilmesBO>();
 }

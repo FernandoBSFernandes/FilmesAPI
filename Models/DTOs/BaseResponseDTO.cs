@@ -1,12 +1,14 @@
 ﻿using Models.ErrorObject;
 using System.Net;
+using System.Text.Json.Serialization;
 
 namespace Models.DTOs
 {
     public abstract class BaseResponseDTO
     {
-        
         public HttpStatusCode CodigoStatus { get; internal set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Erro Erro { get; internal set; }
 
         /// <summary>
