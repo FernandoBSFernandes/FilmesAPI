@@ -11,11 +11,13 @@ namespace APIProject.Controllers
 
         private readonly IRetornaFilmesBO retornaTodosFilmesBO;
         private readonly ISalvarFilmesBO salvarFilmesBO;
+        private readonly IAtualizarFilmeBO atualizarFilmeBO;
 
-        public FilmeController(IRetornaFilmesBO retornaTodosFilmesBO, ISalvarFilmesBO salvarFilmesBO)
+        public FilmeController(IRetornaFilmesBO retornaTodosFilmesBO, ISalvarFilmesBO salvarFilmesBO, IAtualizarFilmeBO atualizarFilmeBO)
         {
             this.retornaTodosFilmesBO = retornaTodosFilmesBO;
             this.salvarFilmesBO = salvarFilmesBO;
+            this.atualizarFilmeBO = atualizarFilmeBO;
         }
 
         [HttpGet("/obtertodos")]
@@ -36,23 +38,24 @@ namespace APIProject.Controllers
         public ActionResult Salvar([FromBody] SalvarFilmeRequestDTO request)
         {
             var response = salvarFilmesBO.SalvarFilme(request);
-
             return StatusCode((int)response.CodigoStatus, response);
         }
 
         [HttpPut("/atualizar/{id}")]
-        public void Atualizar(int id, [FromBody] string value)
+        public ActionResult Atualizar([FromRoute]long id, [FromBody] AtualizarFilmeRequestDTO request)
         {
+            var response = atualizarFilmeBO.AtualizarFilme(request, id);
+            return StatusCode((int)response.CodigoStatus, response);
         }
 
-        [HttpPatch]
-        public /*ActionResult*/ void AtualizarInfoFilme(int id, [FromBody] object value)
+        [HttpPatch("/atualizar/{id}")]
+        public /*ActionResult*/ void AtualizarInfoFilme([FromRoute] long id, [FromBody] AtualizarFilmeRequestDTO request)
         {
 
         }
 
         [HttpDelete("/remover/{id}")]
-        public void Remover(int id)
+        public void Remover([FromRoute] int id)
         {
         }
     }
