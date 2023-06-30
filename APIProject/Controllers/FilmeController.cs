@@ -1,4 +1,5 @@
-﻿using BusinessRulesContracts.Interfaces;
+﻿using Azure.Core;
+using BusinessRulesContracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Request;
 
@@ -12,12 +13,14 @@ namespace APIProject.Controllers
         private readonly IRetornaFilmesBO retornaFilmesBO;
         private readonly ISalvarFilmesBO salvarFilmesBO;
         private readonly IAtualizarFilmeBO atualizarFilmeBO;
+        private readonly IRemoverFilmesBO removerFilmesBO;
 
-        public FilmeController(IRetornaFilmesBO retornaFilmesBO, ISalvarFilmesBO salvarFilmesBO, IAtualizarFilmeBO atualizarFilmeBO)
+        public FilmeController(IRetornaFilmesBO retornaFilmesBO, ISalvarFilmesBO salvarFilmesBO, IAtualizarFilmeBO atualizarFilmeBO, IRemoverFilmesBO removerFilmesBO)
         {
             this.retornaFilmesBO = retornaFilmesBO;
             this.salvarFilmesBO = salvarFilmesBO;
             this.atualizarFilmeBO = atualizarFilmeBO;
+            this.removerFilmesBO = removerFilmesBO;
         }
 
         [HttpGet("/obtertodos")]
@@ -55,8 +58,10 @@ namespace APIProject.Controllers
         }
 
         [HttpDelete("/remover/{id}")]
-        public void Remover([FromRoute] int id)
+        public ActionResult Remover([FromRoute]long id)
         {
+            var response = removerFilmesBO.ExcluirFilme(id);
+            return StatusCode((int)response.CodigoStatus, response);
         }
     }
 }
