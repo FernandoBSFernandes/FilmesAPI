@@ -2,6 +2,7 @@
 using BusinessRulesContracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Request;
+using Models.DTOs.Response;
 
 namespace APIProject.Controllers
 {
@@ -44,6 +45,14 @@ namespace APIProject.Controllers
             return StatusCode((int)response.CodigoStatus, response);
         }
 
+        [HttpPost("/incluirTodos")]
+        public ActionResult SalvarFilmes([FromBody] SalvarFilmesEmLoteRequestDTO request)
+        {
+            var response = salvarFilmesBO.SalvarFilmesEmLote(request);
+            return StatusCode((int)response.CodigoStatus, response);
+        }
+
+
         [HttpPut("/atualizar/{id}")]
         public ActionResult Atualizar([FromRoute]long id, [FromBody] AtualizarFilmeRequestDTO request)
         {
@@ -51,11 +60,11 @@ namespace APIProject.Controllers
             return StatusCode((int)response.CodigoStatus, response);
         }
 
-        [HttpPatch("/atualizar/{id}")]
-        public /*ActionResult*/ void AtualizarInfoFilme([FromRoute] long id, [FromBody] AtualizarFilmeRequestDTO request)
-        {
+        //[HttpPatch("/atualizar/{id}")]
+        //public /*ActionResult*/ void AtualizarInfoFilme([FromRoute] long id, [FromBody] AtualizarFilmeRequestDTO request)
+        //{
 
-        }
+        //}
 
         [HttpDelete("/remover/{id}")]
         public ActionResult Remover([FromRoute]long id)

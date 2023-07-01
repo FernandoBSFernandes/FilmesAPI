@@ -9,6 +9,7 @@ using System.Net;
 
 using FilmesFromDTO = Models.DTOs.Objects.Filme;
 using FilmesFromDB = Models.Tables.Filme;
+using Models.DTOs.Objects;
 
 namespace BusinessRulesImpl
 {
@@ -44,6 +45,33 @@ namespace BusinessRulesImpl
             {
                 return new SalvarFilmeResponseDTO(HttpStatusCode.BadRequest, new Erro(e.Message));
             }
+        }
+
+        public SalvarFilmesEmLoteResponseDTO SalvarFilmesEmLote(SalvarFilmesEmLoteRequestDTO request)
+        {
+
+            SalvarFilmesEmLoteResponseDTO response;
+
+            try
+            {
+                var filmes = mapper.Map<List<FilmesFromDB>>(request.Filmes);
+
+                context.Filme.AddRange(filmes);
+                context.SaveChanges();
+
+                List<DadosFilmeCriado> dadosFilmesCriado = new List<DadosFilmeCriado>();
+
+                filmes.ForEach(filme => dadosFilmesCriado.Add(new DadosFilmeCriado(filme.Nome, filme.Id)));
+
+                response = new SalvarFilmesEmLoteResponseDTO(HttpStatusCode.Created, dadosFilmesCriado);
+
+            }
+            catch (Exception e)
+            {
+                response = new SalvarFilmesEmLoteResponseDTO(HttpStatusCode.BadRequest, new Erro(e.Message));
+            }
+
+            return response;
         }
     }
 }

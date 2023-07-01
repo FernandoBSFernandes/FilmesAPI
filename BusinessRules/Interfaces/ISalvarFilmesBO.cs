@@ -6,6 +6,6 @@ namespace BusinessRulesContracts.Interfaces
     public interface ISalvarFilmesBO
     {
         SalvarFilmeResponseDTO SalvarFilme(SalvarFilmeRequestDTO request);
-        //SalvarFilmeRequestDTO SalvarFilmes();
+        SalvarFilmesEmLoteResponseDTO SalvarFilmesEmLote(SalvarFilmesEmLoteRequestDTO request);
     }
 }
