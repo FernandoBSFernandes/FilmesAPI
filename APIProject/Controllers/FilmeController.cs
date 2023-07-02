@@ -1,8 +1,6 @@
-﻿using Azure.Core;
-using BusinessRulesContracts.Interfaces;
+﻿using BusinessRulesContracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Request;
-using Models.DTOs.Response;
 
 namespace APIProject.Controllers
 {
@@ -54,7 +52,7 @@ namespace APIProject.Controllers
 
 
         [HttpPut("/atualizar/{id}")]
-        public ActionResult Atualizar([FromRoute]long id, [FromBody] AtualizarFilmeRequestDTO request)
+        public ActionResult Atualizar([FromRoute] long id, [FromBody] AtualizarFilmeRequestDTO request)
         {
             var response = atualizarFilmeBO.AtualizarFilme(request, id);
             return StatusCode((int)response.CodigoStatus, response);
@@ -67,7 +65,7 @@ namespace APIProject.Controllers
         //}
 
         [HttpDelete("/remover/{id}")]
-        public ActionResult Remover([FromRoute]long id)
+        public ActionResult Remover([FromRoute] long id)
         {
             var response = removerFilmesBO.ExcluirFilme(id);
             return StatusCode((int)response.CodigoStatus, response);

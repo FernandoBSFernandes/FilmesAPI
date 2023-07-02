@@ -6,9 +6,6 @@ using Models.DTOs.Response;
 using Models.ErrorObject;
 using Repositories.Context;
 using System.Net;
-
-using FilmesFromDTO = Models.DTOs.Objects.Filme;
-using FilmesFromDB = Models.Tables.Filme;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessRulesImpl
