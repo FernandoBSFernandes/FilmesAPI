@@ -14,6 +14,11 @@ namespace Exceptions
             Erros = erros;
         }
 
+        public ValidationException(string mensagemErro) : base(mensagemErro)
+        {
+            
+        }
+
         protected ValidationException(SerializationInfo serializationInfo, StreamingContext streamingContext) 
             : base(serializationInfo, streamingContext)
         {
