@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BusinessRules\BusinessRulesContracts.csproj" />
+    <ProjectReference Include="..\Exceptions\Exceptions.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Repositories\Repositories.csproj" />
   </ItemGroup>

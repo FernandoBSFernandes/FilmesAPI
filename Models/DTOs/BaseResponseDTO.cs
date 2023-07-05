@@ -11,6 +11,9 @@ namespace Models.DTOs
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Erro Erro { get; internal set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<Erro> Erros { get; set; }
+
         /// <summary>
         /// Construtor que deve ser chamado em caso de retorno com erro para quem consome a API e espera uma resposta,
         /// </summary>
@@ -28,6 +31,11 @@ namespace Models.DTOs
         public BaseResponseDTO(HttpStatusCode codigoStatus)
         {
             CodigoStatus = codigoStatus;
+        }
+
+        public BaseResponseDTO(HttpStatusCode codigoStatus, Erro erro, List<Erro> erros) : this(codigoStatus, erro)
+        {
+            Erros = erros;
         }
     }
 }
