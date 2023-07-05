@@ -11,7 +11,6 @@ using System.Net;
 
 using FilmesFromDTO = Models.DTOs.Objects.Filme;
 using FilmesFromDB = Models.Tables.Filme;
-using Models.Tables;
 
 namespace BusinessRulesImpl
 {
@@ -43,11 +42,17 @@ namespace BusinessRulesImpl
                 long id = filme.Id;
 
                 return new SalvarFilmeResponseDTO(HttpStatusCode.Created, id);
-
+            }
+            catch (ValidationException e)
+            {
+                return e.Erros == null || !e.Erros.Any()
+                    ? new SalvarFilmeResponseDTO(HttpStatusCode.BadRequest, new Erro(e.Message))
+                    : new SalvarFilmeResponseDTO(HttpStatusCode.BadRequest, new Erro("Ocorreram erros de validação."), e.Erros);
+            
             }
             catch (Exception e)
             {
-                return new SalvarFilmeResponseDTO(HttpStatusCode.BadRequest, new Erro(e.Message));
+                return new SalvarFilmeResponseDTO(HttpStatusCode.InternalServerError, new Erro(e.Message));
             }
         }
 
@@ -56,7 +61,7 @@ namespace BusinessRulesImpl
             List<Erro> erros = new List<Erro>();
 
             if (request == null || request.DadosFilme == null)
-                throw new ValidationException("Não há dados a serem validados. Portanto, não é possível salvar o filme.");
+                throw new ValidationException("Dados não informados. Favor informá-los.");
 
             ValidarDadosFilme(request, erros);
 
@@ -91,23 +96,23 @@ namespace BusinessRulesImpl
                 ValidarDiretoresFilme(dadosFilme.Diretores, erros);
         }
 
-        private void ValidarAtoresFilme(List<Models.DTOs.Objects.Ator> atores, List<Erro> erros)
+        private void ValidarAtoresFilme(List<Ator> atores, List<Erro> erros)
         {
             var ator = atores.Where(actor => string.IsNullOrWhiteSpace(actor.Nome) || !actor.Papel.HasValue).ToList();
 
             for (int indice = 0; indice < ator.Count; indice++)
             {
                 if (!ator[indice].Papel.HasValue)
-                    erros.Add(new Erro($"dadosFilme.atores[{indice}].papel", "Informe o papel do ator nesse índice informado."));
+                    erros.Add(new Erro($"dadosFilme.atores[{indice}].papel", "Informe o papel do ator ou atriz nesse índice informado."));
 
                 if (string.IsNullOrWhiteSpace(ator[indice].Nome))
-                    erros.Add(new Erro($"dadosFilme.atores[{indice}].nome", "Informe o nome do ator nesse índice informado."));
+                    erros.Add(new Erro($"dadosFilme.atores[{indice}].nome", "Informe o nome do ator ou atriz nesse índice informado."));
 
             }
 
         }
 
-        private void ValidarDiretoresFilme(List<Models.DTOs.Objects.Diretor> diretores, List<Erro> erros)
+        private void ValidarDiretoresFilme(List<Diretor> diretores, List<Erro> erros)
         {
 
             var diretoresInvalidos = diretores.Where(diretor => string.IsNullOrWhiteSpace(diretor.Nome)).ToList();

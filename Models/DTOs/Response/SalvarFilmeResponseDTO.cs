@@ -15,7 +15,10 @@ namespace Models.DTOs.Response
         }
 
         public SalvarFilmeResponseDTO(HttpStatusCode codigoStatus, Erro erro) : base(codigoStatus, erro)
-        {
-        }
+        { }
+
+        public SalvarFilmeResponseDTO(HttpStatusCode codigoStatus, Erro erro, List<Erro> erros) : base(codigoStatus, erro, erros)
+        { }
+
     }
 }
