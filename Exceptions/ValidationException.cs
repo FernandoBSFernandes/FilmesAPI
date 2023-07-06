@@ -3,12 +3,19 @@ using System.Runtime.Serialization;
 
 namespace Exceptions
 {
+    /// <summary>
+    /// Classe de exceção utilizada para quando há algum campo inválido antes de realizar a comunicação com o banco de dados.
+    /// </summary>
     [Serializable]
     public class ValidationException : Exception
     {
 
         public List<Erro> Erros { get; internal set; }
 
+        /// <summary>
+        /// Inicializa uma nova instância da classe ValidationException com uma lista de erros a serem informadas para o usuário.
+        /// </summary>
+        /// <param name="erros"></param>
         public ValidationException(List<Erro> erros) : base()
         {
             Erros = erros;

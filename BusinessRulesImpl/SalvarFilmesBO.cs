@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using BusinessRulesContracts.Interfaces;
 using Exceptions;
-using Microsoft.Extensions.Configuration;
 using Models.DTOs.Objects;
 using Models.DTOs.Request;
 using Models.DTOs.Response;
 using Models.ErrorObject;
 using Repositories.Context;
 using System.Net;
+using Util;
 
 using FilmesFromDTO = Models.DTOs.Objects.Filme;
 using FilmesFromDB = Models.Tables.Filme;
@@ -18,15 +18,15 @@ namespace BusinessRulesImpl
     {
 
         private readonly FilmeContext context;
-        private readonly IConfiguration config;
         private readonly IMapper mapper;
 
-        public SalvarFilmesBO(FilmeContext context, IConfiguration config, IMapper mapper)
+        public SalvarFilmesBO(FilmeContext context, IMapper mapper)
         {
             this.context = context;
-            this.config = config;
             this.mapper = mapper;
         }
+
+        #region Salvar apenas 1 filme por vez
 
         public SalvarFilmeResponseDTO SalvarFilme(SalvarFilmeRequestDTO request)
         {
@@ -48,7 +48,7 @@ namespace BusinessRulesImpl
                 return e.Erros == null || !e.Erros.Any()
                     ? new SalvarFilmeResponseDTO(HttpStatusCode.BadRequest, new Erro(e.Message))
                     : new SalvarFilmeResponseDTO(HttpStatusCode.BadRequest, new Erro("Ocorreram erros de validação."), e.Erros);
-            
+
             }
             catch (Exception e)
             {
@@ -85,12 +85,12 @@ namespace BusinessRulesImpl
 
         private void ValidarDadosComplementaresFilme(FilmesFromDTO dadosFilme, List<Erro> erros)
         {
-            if (dadosFilme.Atores == null || !dadosFilme.Atores.Any())
+            if (!dadosFilme.Atores.HasElements())
                 erros.Add(new Erro("dadosFilme.atores", "Um filme precisa de 1 ou mais atores. Informe-os."));
             else
                 ValidarAtoresFilme(dadosFilme.Atores, erros);
 
-            if (dadosFilme.Diretores == null || !dadosFilme.Diretores.Any())
+            if (!dadosFilme.Diretores.HasElements())
                 erros.Add(new Erro("dadosFilme.diretores", "Um filme precisa de 1 ou mais diretores. Informe-os."));
             else
                 ValidarDiretoresFilme(dadosFilme.Diretores, erros);
@@ -124,6 +124,8 @@ namespace BusinessRulesImpl
 
         }
 
+        #endregion
+
         public SalvarFilmesEmLoteResponseDTO SalvarFilmesEmLote(SalvarFilmesEmLoteRequestDTO request)
         {
 
@@ -131,6 +133,8 @@ namespace BusinessRulesImpl
 
             try
             {
+                ValidarDados(request);
+
                 var filmes = mapper.Map<List<FilmesFromDB>>(request.Filmes);
 
                 context.Filme.AddRange(filmes);
@@ -153,6 +157,24 @@ namespace BusinessRulesImpl
             }
 
             return response;
+        }
+
+        private void ValidarDados(SalvarFilmesEmLoteRequestDTO request)
+        {
+            List<Erro> erros = new List<Erro>();
+
+            if (request == null || !request.Filmes.HasElements())
+                throw new ValidationException("Dados não informados. Favor informá-los.");
+
+            ValidarDadosFilme(request, erros);
+
+            if (erros.Any())
+                throw new ValidationException(erros);
+        }
+
+        private void ValidarDadosFilme(SalvarFilmesEmLoteRequestDTO request, List<Erro> erros)
+        {
+            throw new NotImplementedException();
         }
     }
 }
