@@ -154,7 +154,7 @@ namespace BusinessRulesImpl
             }
             catch (Exception e)
             {
-                response = new SalvarFilmesEmLoteResponseDTO(HttpStatusCode.BadRequest, new Erro(e.Message));
+                response = new SalvarFilmesEmLoteResponseDTO(HttpStatusCode.InternalServerError, new Erro(e.Message));
             }
 
             return response;
