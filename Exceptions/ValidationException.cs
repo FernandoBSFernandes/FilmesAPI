@@ -1,4 +1,5 @@
 ﻿using Models.ErrorObject;
+using System.Collections;
 using System.Runtime.Serialization;
 
 namespace Exceptions
@@ -11,6 +12,12 @@ namespace Exceptions
     {
 
         public List<Erro> Erros { get; internal set; }
+        public IEnumerable ObjetosInvalidos { get; internal set; }
+
+        public ValidationException(IEnumerable objetosInvalidos, string mensagemErro) : this(mensagemErro)
+        {
+            ObjetosInvalidos = objetosInvalidos;
+        }
 
         /// <summary>
         /// Inicializa uma nova instância da classe ValidationException com uma lista de erros a serem informadas para o usuário.
@@ -21,14 +28,9 @@ namespace Exceptions
             Erros = erros;
         }
 
-        public ValidationException(string mensagemErro) : base(mensagemErro)
-        {
-            
-        }
+        public ValidationException(string mensagemErro) : base(mensagemErro) { }
 
         protected ValidationException(SerializationInfo serializationInfo, StreamingContext streamingContext) 
-            : base(serializationInfo, streamingContext)
-        {
-        }
+            : base(serializationInfo, streamingContext) { }
     }
 }
