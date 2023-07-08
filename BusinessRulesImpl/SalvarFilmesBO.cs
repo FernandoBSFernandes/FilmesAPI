@@ -45,7 +45,7 @@ namespace BusinessRulesImpl
             }
             catch (ValidationException e)
             {
-                return e.Erros == null || !e.Erros.Any()
+                return e.Erros.HasElements()
                     ? new SalvarFilmeResponseDTO(HttpStatusCode.BadRequest, new Erro(e.Message))
                     : new SalvarFilmeResponseDTO(HttpStatusCode.BadRequest, new Erro("Ocorreram erros de validação."), e.Erros);
 
@@ -171,6 +171,11 @@ namespace BusinessRulesImpl
                 throw new ValidationException(filmesComDadosObrigatoriosNaoPreenchidos, "O seu request possui erros de validação. Alguns dados obrigatórios não estão preenchidos. Favor verificar.");
         }
 
+        /// <summary>
+        /// Verifica se algum dado na coleção de filmes a serem persistidos não foi preenchido. Caso se confirme, uma lista com elementos que possuem um dado inválido será criada.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         private static List<FilmesFromDTO> ValidarDadosFilme(SalvarFilmesEmLoteRequestDTO request)
         {
 

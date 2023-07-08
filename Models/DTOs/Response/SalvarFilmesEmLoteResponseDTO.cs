@@ -29,10 +29,5 @@ namespace Models.DTOs.Response
         {
         }
 
-
-
-        public SalvarFilmesEmLoteResponseDTO(HttpStatusCode codigoStatus, Erro erro, List<Erro> erros) : base(codigoStatus, erro, erros)
-        {
-        }
     }
 }
