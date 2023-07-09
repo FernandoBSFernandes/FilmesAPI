@@ -127,23 +127,21 @@ namespace BusinessRulesImpl
         #endregion
 
         #region Salvamento em lote de varios filmes de uma vez
-        public SalvarFilmesEmLoteResponseDTO SalvarFilmesEmLote(SalvarFilmesEmLoteRequestDTO request)
+        public async Task<SalvarFilmesEmLoteResponseDTO> SalvarFilmesEmLoteAsync(SalvarFilmesEmLoteRequestDTO request)
         {
 
             SalvarFilmesEmLoteResponseDTO response;
 
             try
             {
-                ValidarDados(request);
+                await ValidarDadosAsync(request);
 
                 var filmes = mapper.Map<List<FilmesFromDB>>(request.Filmes);
 
-                context.Filme.AddRange(filmes);
-                context.SaveChanges();
+                await context.Filme.AddRangeAsync(filmes);
+                await context.SaveChangesAsync();
 
-                List<DadosFilmeCriado> dadosFilmesCriado = new();
-
-                filmes.ForEach(filme => dadosFilmesCriado.Add(new DadosFilmeCriado(filme.Nome, filme.Id)));
+                List<DadosFilmeCriado> dadosFilmesCriado = filmes.Select(filme => new DadosFilmeCriado(filme.Nome, filme.Id)).ToList();
 
                 response = new SalvarFilmesEmLoteResponseDTO(HttpStatusCode.Created, dadosFilmesCriado);
 
@@ -160,12 +158,12 @@ namespace BusinessRulesImpl
             return response;
         }
 
-        private void ValidarDados(SalvarFilmesEmLoteRequestDTO request)
+        private async Task ValidarDadosAsync(SalvarFilmesEmLoteRequestDTO request)
         {
             if (request == null || !request.Filmes.HasElements())
                 throw new ValidationException("Dados não informados. Favor informá-los.");
 
-            List<FilmesFromDTO> filmesComDadosObrigatoriosNaoPreenchidos = ValidarDadosFilme(request);
+            List<FilmesFromDTO> filmesComDadosObrigatoriosNaoPreenchidos = await ValidarDadosFilmeAsync(request);
 
             if (filmesComDadosObrigatoriosNaoPreenchidos.Any())
                 throw new ValidationException(filmesComDadosObrigatoriosNaoPreenchidos, "O seu request possui erros de validação. Alguns dados obrigatórios não estão preenchidos. Favor verificar.");
@@ -176,27 +174,46 @@ namespace BusinessRulesImpl
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        private static List<FilmesFromDTO> ValidarDadosFilme(SalvarFilmesEmLoteRequestDTO request)
+        private async Task<List<FilmesFromDTO>> ValidarDadosFilmeAsync(SalvarFilmesEmLoteRequestDTO request)
         {
 
-            List<FilmesFromDTO> filmesComDadosObrigatoriosNaoPreenchidos = request.Filmes.Where(filme =>
+            var tarefa = await Task.Run(() =>
             {
-                var propriedadesFilmeNaoPossuiValor = string.IsNullOrWhiteSpace(filme.Nome) || !filme.Duracao.HasValue || !filme.Ano.HasValue;
+                return request.Filmes.Where(filme =>
+                {
+                    var propriedadesFilmeNaoPossuiValor = string.IsNullOrWhiteSpace(filme.Nome) || !filme.Duracao.HasValue || !filme.Ano.HasValue;
 
-                var filmeNaoPossuiEstilo = filme.Estilo == null || string.IsNullOrWhiteSpace(filme.Estilo.Descricao);
+                    var filmeNaoPossuiEstilo = filme.Estilo == null || string.IsNullOrWhiteSpace(filme.Estilo.Descricao);
 
-                var listaDiretoresSemValor = filme.Diretores == null || !filme.Diretores.Any() || filme.Diretores.Any(diretor => string.IsNullOrWhiteSpace(diretor.Nome));
+                    var listaDiretoresSemValor = filme.Diretores == null || !filme.Diretores.Any() || filme.Diretores.Any(diretor => string.IsNullOrWhiteSpace(diretor.Nome));
 
-                var filmeComAtoresSemValor = filme.Atores == null || !filme.Atores.Any() || filme.Atores.Any(ator => string.IsNullOrWhiteSpace(ator.Nome) || !ator.Papel.HasValue);
+                    var filmeComAtoresSemValor = filme.Atores == null || !filme.Atores.Any() || filme.Atores.Any(ator => string.IsNullOrWhiteSpace(ator.Nome) || !ator.Papel.HasValue);
 
-                return propriedadesFilmeNaoPossuiValor || filmeNaoPossuiEstilo || listaDiretoresSemValor || filmeComAtoresSemValor;
-            }).ToList();
+                    return propriedadesFilmeNaoPossuiValor || filmeNaoPossuiEstilo || listaDiretoresSemValor || filmeComAtoresSemValor;
+                }).ToList();
+            });
 
-            return filmesComDadosObrigatoriosNaoPreenchidos;
+            return tarefa;
+
+            //List<FilmesFromDTO> filmesComDadosObrigatoriosNaoPreenchidos = request.Filmes.Where(filme =>
+            //{
+            //    var propriedadesFilmeNaoPossuiValor = string.IsNullOrWhiteSpace(filme.Nome) || !filme.Duracao.HasValue || !filme.Ano.HasValue;
+
+            //    var filmeNaoPossuiEstilo = filme.Estilo == null || string.IsNullOrWhiteSpace(filme.Estilo.Descricao);
+
+            //    var listaDiretoresSemValor = filme.Diretores == null || !filme.Diretores.Any() || filme.Diretores.Any(diretor => string.IsNullOrWhiteSpace(diretor.Nome));
+
+            //    var filmeComAtoresSemValor = filme.Atores == null || !filme.Atores.Any() || filme.Atores.Any(ator => string.IsNullOrWhiteSpace(ator.Nome) || !ator.Papel.HasValue);
+
+            //    return propriedadesFilmeNaoPossuiValor || filmeNaoPossuiEstilo || listaDiretoresSemValor || filmeComAtoresSemValor;
+            //}).ToList();
+
+            //return filmesComDadosObrigatoriosNaoPreenchidos;
 
         }
 
         #endregion
+
     }
 }
 

@@ -4,8 +4,8 @@ using Models.DTOs.Request;
 
 namespace APIProject.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     [Consumes("application/json")]
     [Produces("application/json")]
     public class FilmeController : ControllerBase
@@ -46,9 +46,9 @@ namespace APIProject.Controllers
         }
 
         [HttpPost("/incluirTodos")]
-        public ActionResult SalvarFilmes([FromBody] SalvarFilmesEmLoteRequestDTO request)
+        public async Task<ActionResult> SalvarFilmes([FromBody] SalvarFilmesEmLoteRequestDTO request)
         {
-            var response = salvarFilmesBO.SalvarFilmesEmLote(request);
+            var response = await salvarFilmesBO.SalvarFilmesEmLoteAsync(request);
             return StatusCode((int)response.CodigoStatus, response);
         }
 
