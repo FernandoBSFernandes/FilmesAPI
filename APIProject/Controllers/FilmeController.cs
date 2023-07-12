@@ -27,7 +27,7 @@ namespace APIProject.Controllers
         /// <summary>
         /// Retorna todos os filmes disponíveis.
         /// </summary>
-        /// <param>Não é necessário parâmetros.</param>
+        /// <returns>Retorna todos os filmes que tem na base.</returns>
         /// <response code="200">Retorna com sucesso quais filmes já foram disponibiizados.</response>
         [HttpGet("/obtertodos")]
         public ActionResult GetAll()
@@ -87,7 +87,7 @@ namespace APIProject.Controllers
         /// <param name="id">O ID do filme que deve ser atualizado.</param>
         /// <param name="request"></param>
         /// <returns>Codigo de retorno indicando o que ocorreu.</returns>
-        /// <response code="204">Indica que os filme foi atualizado na base com sucesso.</response>
+        /// <response code="204">Indica que o filme foi atualizado na base com sucesso.</response>
         /// <response code="404">Indica que o filme com o ID informado não foi encontrado.</response>
         /// <response code="500">Indica que houve um problema interno no servidor.</response>
         [HttpPut("/atualizar/{id}")]
@@ -107,7 +107,10 @@ namespace APIProject.Controllers
         /// Remove um filme da base.
         /// </summary>
         /// <param name="id">O ID do filme que deve ser removido.</param>
-        /// <returns></returns>
+        /// <returns>Codigo de Status <see cref="System.Net.HttpStatusCode">(HttpStatusCode)</see></returns>
+        /// <response code="204">Indica que o filme foi removido na base com sucesso.</response>
+        /// <response code="404">Indica que o filme com o ID informado não foi encontrado.</response>
+        /// <response code="500">Indica que houve um problema interno no servidor.</response>
         [HttpDelete("/remover/{id}")]
         public ActionResult Remover([FromRoute] long id)
         {
