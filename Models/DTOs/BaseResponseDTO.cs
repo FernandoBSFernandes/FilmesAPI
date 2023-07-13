@@ -17,9 +17,7 @@ namespace Models.DTOs
         /// <summary>
         /// Construtor que deve ser chamado em caso de retorno com erro para quem consome a API e espera uma resposta,
         /// </summary>
-        /// <param name="codigoStatus"></param>
-        /// <param name="erro"></param>
-        public BaseResponseDTO(HttpStatusCode codigoStatus, Erro erro) : this(codigoStatus)
+        protected BaseResponseDTO(HttpStatusCode codigoStatus, Erro erro) : this(codigoStatus)
         {
             Erro = erro;
         }
@@ -27,13 +25,15 @@ namespace Models.DTOs
         /// <summary>
         /// Construtor que deve ser chamado em caso de retorno positivo para quem consome a API e espera uma resposta,
         /// </summary>
-        /// <param name="codigoStatus"></param>
-        public BaseResponseDTO(HttpStatusCode codigoStatus)
+        protected BaseResponseDTO(HttpStatusCode codigoStatus)
         {
             CodigoStatus = codigoStatus;
         }
 
-        public BaseResponseDTO(HttpStatusCode codigoStatus, Erro erro, List<Erro> erros) : this(codigoStatus, erro)
+        /// <summary>
+        /// Construtor que deve ser chamado em caso de retorno com erro para quem consome a API e espera uma resposta, e quando deve-se retornar uma lista com erros em capos especificados.
+        /// </summary>
+        protected BaseResponseDTO(HttpStatusCode codigoStatus, Erro erro, List<Erro> erros) : this(codigoStatus, erro)
         {
             Erros = erros;
         }

@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using BusinessRulesContracts.Interfaces;
-using Microsoft.Extensions.Configuration;
 using Models.DTOs.Response;
 using Models.ErrorObject;
 using Repositories.Context;
 using System.Net;
+using Microsoft.EntityFrameworkCore;
 
 using FilmesFromDTO = Models.DTOs.Objects.Filme;
 using FilmesFromDB = Models.Tables.Filme;
-using Microsoft.EntityFrameworkCore;
 
 namespace BusinessRulesImpl
 {
@@ -16,13 +15,11 @@ namespace BusinessRulesImpl
     {
 
         private readonly FilmeContext context;
-        private readonly IConfiguration config;
         private readonly IMapper mapper;
 
-        public RetornarFilmesBO(FilmeContext context, IConfiguration config, IMapper mapper)
+        public RetornarFilmesBO(FilmeContext context, IMapper mapper)
         {
             this.context = context;
-            this.config = config;
             this.mapper = mapper;
         }
 
@@ -35,8 +32,8 @@ namespace BusinessRulesImpl
                 var filmeEncontrado = context.Filme.Where(filme => filme.Id == id)
                     .Include(filme => filme.Diretores).Include(filme => filme.Atores).Include(filme => filme.Estilo)
                     .FirstOrDefault();
-                
-                response = filmeEncontrado is null ? new RetornaFilmeResponseDTO() : 
+
+                response = filmeEncontrado is null ? new RetornaFilmeResponseDTO() :
                     new RetornaFilmeResponseDTO(HttpStatusCode.OK, mapper.Map<FilmesFromDTO>(filmeEncontrado));
             }
             catch (Exception e)
@@ -57,12 +54,10 @@ namespace BusinessRulesImpl
                     Include(filme => filme.Diretores).Include(filme => filme.Atores).Include(filme => filme.Estilo).
                     ToList();
 
-                if (!filmes.Any())
-                    filmes = Enumerable.Empty<FilmesFromDB>().ToList();
-
-                var filmesToDTO = mapper.Map<List<FilmesFromDB>, List<FilmesFromDTO>>(filmes);
-
-                response = new RetornaTodosFilmesResponseDTO(HttpStatusCode.OK, filmesToDTO);
+                response = !filmes.Any() ? 
+                    new RetornaTodosFilmesResponseDTO() :
+                    new RetornaTodosFilmesResponseDTO(HttpStatusCode.OK, 
+                        mapper.Map<List<FilmesFromDB>, List<FilmesFromDTO>>(filmes));
 
             }
             catch (Exception e)

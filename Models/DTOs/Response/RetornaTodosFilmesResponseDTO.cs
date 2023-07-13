@@ -18,5 +18,11 @@ namespace Models.DTOs.Response
         public RetornaTodosFilmesResponseDTO(HttpStatusCode codigoErro, Erro erro) : base(codigoErro, erro)
         { }
 
+        /// <summary>
+        /// Construtor utilizado para identificar que não há filmes cadastrados. O retorno não se caracteriza como necessariamente negativo, pois nenhuma exceção foi lançada.
+        /// </summary>
+        public RetornaTodosFilmesResponseDTO() : base(HttpStatusCode.NotFound)
+        { }
+
     }
 }

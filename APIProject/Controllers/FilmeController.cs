@@ -1,6 +1,8 @@
 ﻿using BusinessRulesContracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Models.DTOs.Request;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace APIProject.Controllers
 {
@@ -98,9 +100,9 @@ namespace APIProject.Controllers
         }
 
         //[HttpPatch("/atualizar/{id}")]
-        //public /*ActionResult*/ void AtualizarInfoFilme([FromRoute] long id, [FromBody] AtualizarFilmeRequestDTO request)
+        //public /*ActionResult*/ void AtualizarInfoFilme([FromRoute] long id, [FromBody] JsonPatchDocument request)
         //{
-
+        //    var response = atualizarFilmeBO.
         //}
 
         /// <summary>

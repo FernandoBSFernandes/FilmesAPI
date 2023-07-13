@@ -7,6 +7,9 @@ using Models.ErrorObject;
 using Repositories.Context;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.JsonPatch;
+using Models.DTOs.Objects;
+using System.Text.Json;
 
 namespace BusinessRulesImpl
 {
@@ -52,6 +55,31 @@ namespace BusinessRulesImpl
             }
 
             return response;
+        }
+
+        public AtualizarFilmeResponseDTO AtualizarInfoFilme(long id, JsonPatchDocument jsonRequest)
+        {
+            //try
+            //{
+            //    var filme = context.Filme.Find(id);
+
+            //    if (filme == null)
+            //        return new AtualizarFilmeResponseDTO();
+
+            //    jsonRequest.ApplyTo(filme);
+
+            //    var filmeDTO = JsonSerializer.Deserialize<Filme>(jsonRequest.ToString());
+
+
+
+            //}
+            //catch (Exception e)
+            //{
+
+            //    return new AtualizarFilmeResponseDTO();
+            //}
+            return new AtualizarFilmeResponseDTO();
+
         }
     }
 }
