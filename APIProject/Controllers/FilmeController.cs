@@ -106,9 +106,6 @@ namespace APIProject.Controllers
         /// <response code="204">Indica que o filme foi atualizado na base com sucesso.</response>
         /// <response code="404">Indica que o filme com o ID informado não foi encontrado.</response>
         /// <response code="500">Indica que houve um problema interno no servidor.</response>
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPatch("/atualizar/{id}")]
         public ActionResult AtualizarInfoFilme([FromRoute] long id, [FromBody] AtualizarInfoFilmeRequestDTO request)
         {

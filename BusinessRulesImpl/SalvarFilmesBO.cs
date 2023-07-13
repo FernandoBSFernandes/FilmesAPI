@@ -134,7 +134,7 @@ namespace BusinessRulesImpl
 
             try
             {
-                await ValidarDadosAsync(request);
+                ValidarDadosAsync(request);
 
                 var filmes = mapper.Map<List<FilmesFromDB>>(request.Filmes);
 
@@ -158,12 +158,12 @@ namespace BusinessRulesImpl
             return response;
         }
 
-        private async Task ValidarDadosAsync(SalvarFilmesEmLoteRequestDTO request)
+        private void ValidarDadosAsync(SalvarFilmesEmLoteRequestDTO request)
         {
             if (request == null || !request.Filmes.HasElements())
                 throw new ValidationException("Dados não informados. Favor informá-los.");
 
-            List<FilmesFromDTO> filmesComDadosObrigatoriosNaoPreenchidos = ValidarDadosFilmeAsync(request);
+            List<FilmesFromDTO> filmesComDadosObrigatoriosNaoPreenchidos = ValidarDadosFilme(request);
 
             if (filmesComDadosObrigatoriosNaoPreenchidos.Any())
                 throw new ValidationException(filmesComDadosObrigatoriosNaoPreenchidos, "O seu request possui erros de validação. Alguns dados obrigatórios não estão preenchidos. Favor verificar.");
@@ -174,7 +174,7 @@ namespace BusinessRulesImpl
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        private List<FilmesFromDTO> ValidarDadosFilmeAsync(SalvarFilmesEmLoteRequestDTO request)
+        private List<FilmesFromDTO> ValidarDadosFilme(SalvarFilmesEmLoteRequestDTO request)
         {
 
             List<FilmesFromDTO> filmesComDadosObrigatoriosNaoPreenchidos = request.Filmes.Where(filme =>
@@ -183,9 +183,9 @@ namespace BusinessRulesImpl
 
                 var filmeNaoPossuiEstilo = filme.Estilo == null || string.IsNullOrWhiteSpace(filme.Estilo.Descricao);
 
-                var listaDiretoresSemValor = filme.Diretores == null || !filme.Diretores.Any() || filme.Diretores.Any(diretor => string.IsNullOrWhiteSpace(diretor.Nome));
+                var listaDiretoresSemValor = filme.Diretores == null || !filme.Diretores.Any() || filme.Diretores.Exists(diretor => string.IsNullOrWhiteSpace(diretor.Nome));
 
-                var filmeComAtoresSemValor = filme.Atores == null || !filme.Atores.Any() || filme.Atores.Any(ator => string.IsNullOrWhiteSpace(ator.Nome) || !ator.Papel.HasValue);
+                var filmeComAtoresSemValor = filme.Atores == null || !filme.Atores.Any() || filme.Atores.Exists(ator => string.IsNullOrWhiteSpace(ator.Nome) || !ator.Papel.HasValue);
 
                 return propriedadesFilmeNaoPossuiValor || filmeNaoPossuiEstilo || listaDiretoresSemValor || filmeComAtoresSemValor;
             }).ToList();
