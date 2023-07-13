@@ -1,5 +1,4 @@
-﻿using Models.DTOs.Objects;
-using Models.ErrorObject;
+﻿using Models.ErrorObject;
 using System.Net;
 
 namespace Models.DTOs.Response

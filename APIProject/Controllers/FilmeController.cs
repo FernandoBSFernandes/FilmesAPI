@@ -1,8 +1,6 @@
 ﻿using BusinessRulesContracts.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Models.DTOs.Request;
-using Microsoft.AspNetCore.JsonPatch;
 
 namespace APIProject.Controllers
 {
@@ -87,7 +85,7 @@ namespace APIProject.Controllers
         /// Atualiza um filme por completo.
         /// </summary>
         /// <param name="id">O ID do filme que deve ser atualizado.</param>
-        /// <param name="request"></param>
+        /// <param name="request">O filme a ser atualizado.</param>
         /// <returns>Codigo de retorno indicando o que ocorreu.</returns>
         /// <response code="204">Indica que o filme foi atualizado na base com sucesso.</response>
         /// <response code="404">Indica que o filme com o ID informado não foi encontrado.</response>
@@ -99,11 +97,24 @@ namespace APIProject.Controllers
             return StatusCode((int)response.CodigoStatus, response);
         }
 
-        //[HttpPatch("/atualizar/{id}")]
-        //public /*ActionResult*/ void AtualizarInfoFilme([FromRoute] long id, [FromBody] JsonPatchDocument request)
-        //{
-        //    var response = atualizarFilmeBO.
-        //}
+        /// <summary>
+        /// Atualiza algumas informações de um filme.
+        /// </summary>
+        /// <param name="id">O ID do filme que deve ser atualizado.</param>
+        /// <param name="request">As informações do filme que devem ser atualizadas.</param>
+        /// <returns>Codigo de retorno indicando o que ocorreu.</returns>
+        /// <response code="204">Indica que o filme foi atualizado na base com sucesso.</response>
+        /// <response code="404">Indica que o filme com o ID informado não foi encontrado.</response>
+        /// <response code="500">Indica que houve um problema interno no servidor.</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpPatch("/atualizar/{id}")]
+        public ActionResult AtualizarInfoFilme([FromRoute] long id, [FromBody] AtualizarInfoFilmeRequestDTO request)
+        {
+            var response = atualizarFilmeBO.AtualizarInfoFilme(id, request);
+            return StatusCode((int)response.CodigoStatus, response);
+        }
 
         /// <summary>
         /// Remove um filme da base.

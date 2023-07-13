@@ -1,15 +1,13 @@
 ﻿using AutoMapper;
 using BusinessRulesContracts.Interfaces;
-using Microsoft.Extensions.Configuration;
 using Models.DTOs.Request;
 using Models.DTOs.Response;
 using Models.ErrorObject;
 using Repositories.Context;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.JsonPatch;
-using Models.DTOs.Objects;
-using System.Text.Json;
+using Exceptions;
+using Util;
 
 namespace BusinessRulesImpl
 {
@@ -17,13 +15,11 @@ namespace BusinessRulesImpl
     {
 
         private readonly FilmeContext context;
-        private readonly IConfiguration config;
         private readonly IMapper mapper;
 
-        public AtualizarFilmeBO(FilmeContext context, IConfiguration config, IMapper mapper)
+        public AtualizarFilmeBO(FilmeContext context, IMapper mapper)
         {
             this.context = context;
-            this.config = config;
             this.mapper = mapper;
         }
 
@@ -57,29 +53,37 @@ namespace BusinessRulesImpl
             return response;
         }
 
-        public AtualizarFilmeResponseDTO AtualizarInfoFilme(long id, JsonPatchDocument jsonRequest)
+        public AtualizarInfoFilmeResponseDTO AtualizarInfoFilme(long id, AtualizarInfoFilmeRequestDTO request)
         {
-            //try
-            //{
-            //    var filme = context.Filme.Find(id);
+            try
+            {
+                ValidarDados(request);
 
-            //    if (filme == null)
-            //        return new AtualizarFilmeResponseDTO();
+                var filmeEncontrado = context.Filme.Where(filme => filme.Id == id)
+                    .Include(filme => filme.Diretores).Include(filme => filme.Atores).Include(filme => filme.Estilo)
+                    .FirstOrDefault();
 
-            //    jsonRequest.ApplyTo(filme);
+                if (filmeEncontrado == null) 
+                    return new AtualizarInfoFilmeResponseDTO();
 
-            //    var filmeDTO = JsonSerializer.Deserialize<Filme>(jsonRequest.ToString());
+                filmeEncontrado.SetNewValues(request.Filme);
 
+                context.SaveChanges();
 
+                return new AtualizarInfoFilmeResponseDTO(HttpStatusCode.NoContent);
+            }
+            catch (Exception e)
+            {
+                var codigoStatus = e is ValidationException ? HttpStatusCode.BadRequest : HttpStatusCode.InternalServerError;
+                return new AtualizarInfoFilmeResponseDTO(codigoStatus, new Erro(e.Message));
+            }
 
-            //}
-            //catch (Exception e)
-            //{
+        }
 
-            //    return new AtualizarFilmeResponseDTO();
-            //}
-            return new AtualizarFilmeResponseDTO();
-
+        private static void ValidarDados(AtualizarInfoFilmeRequestDTO request)
+        {
+            if (request == null || request.Filme == null)
+                throw new ValidationException("Insira os dados do filme que você quer atualizar.");
         }
     }
 }
