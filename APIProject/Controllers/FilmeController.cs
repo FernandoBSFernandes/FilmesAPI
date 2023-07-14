@@ -14,7 +14,17 @@ namespace APIProject.Controllers
         private readonly IAtualizarFilmeBO atualizarFilmeBO;
         private readonly IRemoverFilmesBO removerFilmesBO;
 
-        public FilmeController(IRetornaFilmesBO retornaFilmesBO, ISalvarFilmesBO salvarFilmesBO, IAtualizarFilmeBO atualizarFilmeBO, IRemoverFilmesBO removerFilmesBO)
+        /// <summary>
+        /// Instancia um novo objeto de controller, contendo as interfaces de service necessárias.
+        /// </summary>
+        /// <param name="retornaFilmesBO"></param>
+        /// <param name="salvarFilmesBO"></param>
+        /// <param name="atualizarFilmeBO"></param>
+        /// <param name="removerFilmesBO"></param>
+        public FilmeController(IRetornaFilmesBO retornaFilmesBO, 
+            ISalvarFilmesBO salvarFilmesBO, 
+            IAtualizarFilmeBO atualizarFilmeBO, 
+            IRemoverFilmesBO removerFilmesBO)
         {
             this.retornaFilmesBO = retornaFilmesBO;
             this.salvarFilmesBO = salvarFilmesBO;

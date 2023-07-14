@@ -27,7 +27,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //Adding DBContexts
 string connectionStringSQLServer = builder.Configuration.GetConnectionString("DefaultSQLServerStringConnection");
-builder.Services.AddDbContext<FilmeContext>(settings => settings.UseSqlServer(connectionStringSQLServer));
+builder.Services.AddDbContext<FilmeContext>(settings => settings.UseSqlServer(connectionStringSQLServer, opts => opts.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
 string connectionStringLogin = builder.Configuration.GetConnectionString("LoginStringConnection");
 builder.Services.AddDbContext<LoginContext>(settings => settings.UseSqlServer(connectionStringLogin));
