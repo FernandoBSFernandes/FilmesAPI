@@ -6,8 +6,6 @@ namespace APIProject.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Consumes("application/json")]
-    [Produces("application/json")]
     public class FilmeController : ControllerBase
     {
 

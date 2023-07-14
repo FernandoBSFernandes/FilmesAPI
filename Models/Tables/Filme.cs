@@ -15,16 +15,16 @@ namespace Models.Tables
         [Column("duracao"), Range(60, 240), Required]
         public int Duracao { get; set; }
 
-        [Column("ano"), Range(1900, 3000)]
+        [Column("ano"), Range(1900, 3000), Required]
         public int Ano { get; set; }
         
-        [Column("diretor"), Required]
+        [Column("diretores"), Required]
         public List<Diretor> Diretores { get; set; }
 
         [Column("estilo"), Required]
         public EstiloFilme Estilo { get; set; }
         
-        [Column("ator"), Required]
+        [Column("atores"), Required]
         public List<Ator> Atores { get; set; }
     }
 }
