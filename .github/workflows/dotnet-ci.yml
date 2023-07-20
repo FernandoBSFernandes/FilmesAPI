@@ -15,8 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Get .NET
+    - name: Checkout Code
+      uses: actions/checkout@v3
+    - name: Get .NET Version
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
@@ -24,5 +25,13 @@ jobs:
       run: dotnet restore
     - name: Build Solution
       run: dotnet build
+      
+    - name: Setup SonarCloud and Run Analyses
+      uses: SonarSource/sonarcloud-github-action@master
+      with:
+        organization: ${{ secrets.SONAR_ORGANIZATION }}
+        projectKey: ${{ secrets.SONAR_PROJECT_KEY }}
+        token: ${{ secrets.SONAR_TOKEN }}
+
     #- name: Test
       #run: dotnet test --no-build --verbosity normal
