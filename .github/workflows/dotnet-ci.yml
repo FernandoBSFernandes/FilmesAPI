@@ -27,11 +27,10 @@ jobs:
       run: dotnet build
       
     - name: Setup SonarCloud and Run Analyses
-      uses: SonarSource/sonarcloud-github-action@master
+      uses: SonarSource/sonarcloud-github-action@v1.9.1
       with:
         organization: ${{ vars.SONAR_ORGANIZATION }}
         projectKey: ${{ vars.SONAR_PROJECT_KEY }}
         token: ${{ vars.SONAR_TOKEN }}
-
     #- name: Test
       #run: dotnet test --no-build --verbosity normal
