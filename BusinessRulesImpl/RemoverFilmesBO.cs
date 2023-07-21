@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using BusinessRulesContracts.Interfaces;
+﻿using BusinessRulesContracts.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Models.DTOs.Response;
 using Models.ErrorObject;
 using Repositories.Context;
@@ -13,14 +11,10 @@ namespace BusinessRulesImpl
     {
 
         private readonly FilmeContext context;
-        private readonly IConfiguration config;
-        private readonly IMapper mapper;
 
-        public RemoverFilmesBO(FilmeContext context, IConfiguration config, IMapper mapper)
+        public RemoverFilmesBO(FilmeContext context)
         {
             this.context = context;
-            this.config = config;
-            this.mapper = mapper;
         }
 
         public RemoverFilmeDTOResponse ExcluirFilme(long id)
@@ -30,7 +24,7 @@ namespace BusinessRulesImpl
             try
             {
                 var filmeEncontrado = context.Filme.
-                    Include(filme => filme.Diretores).Include(filme => filme.Atores)/*.AsSplitQuery()*/.
+                    Include(filme => filme.Diretores).Include(filme => filme.Atores).
                     FirstOrDefault(filme => filme.Id == id);
 
                 if (filmeEncontrado == null)
