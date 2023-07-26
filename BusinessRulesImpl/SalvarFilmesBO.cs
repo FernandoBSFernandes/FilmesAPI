@@ -59,7 +59,7 @@ namespace BusinessRulesImpl
 
         private void ValidarDados(SalvarFilmeRequestDTO request)
         {
-            List<Erro> erros = new List<Erro>();
+            var erros = new List<Erro>();
 
             if (request == null || request.DadosFilme == null)
                 throw new ValidationException("Dados não informados. Favor informá-los.");

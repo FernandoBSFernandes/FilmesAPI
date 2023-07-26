@@ -23,27 +23,26 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
         
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+      #- name: Cache SonarCloud packages
+      #  uses: actions/cache@v3
+      #  with:
+      #    path: ~\sonar\cache
+      #    key: ${{ runner.os }}-sonar
+      #    restore-keys: ${{ runner.os }}-sonar
           
-      - name: Cache SonarCloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v3
-        with:
-          path: .\.sonar\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
+      #- name: Cache SonarCloud scanner
+      #  id: cache-sonar-scanner
+      #  uses: actions/cache@v3
+      #  with:
+      #    path: .\.sonar\scanner
+      #    key: ${{ runner.os }}-sonar-scanner
+      #    restore-keys: ${{ runner.os }}-sonar-scanner
           
-      #- name: Install SonarCloud scanner
-      #  if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-      #  shell: powershell
-      #  run: |
-      #    New-Item -Path .\.sonar\scanner -ItemType Directory
-      #    dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: Install SonarCloud scanner
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       
       - name: Build
         run: dotnet build
@@ -55,7 +54,6 @@ jobs:
         uses: codecov/codecov-action@v2
 
       - name: Restore Packages, Build and Analyse Code
-
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"${{ vars.SONAR_PROJECT }}" /o:"${{ vars.SONAR_ORGANIZATION }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ vars.SONAR_HOST_URL }}"

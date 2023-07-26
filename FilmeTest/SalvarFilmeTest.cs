@@ -19,7 +19,7 @@ public class SalvarFilmeTest
         request = MontaRequest();
     }
 
-    private SalvarFilmeRequestDTO MontaRequest()
+    private static SalvarFilmeRequestDTO MontaRequest()
     {
         var atores = new List<Ator>() 
         { 
