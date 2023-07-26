@@ -88,10 +88,10 @@ namespace BusinessRulesImpl
             if (!request.DadosFilme.Ano.HasValue)
                 erros.Add(new Erro("dadosFilme.ano", "Campo Obrigatório."));
 
-            if(request.DadosFilme.Estilo == null)
+            if (request.DadosFilme.Estilo == null)
                 erros.Add(new Erro("dadosFilme.Estilo", "Instancie um estilo para o filme."));
 
-            else if(string.IsNullOrWhiteSpace(request.DadosFilme.Estilo.Descricao))
+            else if (string.IsNullOrWhiteSpace(request.DadosFilme.Estilo.Descricao))
                 erros.Add(new Erro("dadosFilme.estilo.descricao", "Campo obrigatório."));
 
             ValidarDadosComplementaresFilme(request.DadosFilme, erros);
@@ -175,7 +175,7 @@ namespace BusinessRulesImpl
                 if (ator.Nome.Length > 100)
                     erros.Add(new Erro($"dadosFilme.atores[{index}].nome", "O nome do ator ou da atriz no indice informado excedeu o tamanho máximo de 100 caracteres."));
 
-                if(!Enum.IsDefined(typeof(Papel), ator.Papel.Value))
+                if (!Enum.IsDefined(typeof(Papel), ator.Papel.Value))
                     erros.Add(new Erro($"dadosFilme.atores[{index}].papel",
                         "O valor inserido para o papel não existe. Insira como valor \"Protagonista\", \"Antagonista\", \"Coadjuvante\" ou \"Complementar\"."));
 
@@ -235,21 +235,28 @@ namespace BusinessRulesImpl
             if (request == null || !request.Filmes.HasElements())
                 throw new ValidationException("Dados não informados. Favor informá-los.");
 
-            List<FilmesFromDTO> filmesComDadosObrigatoriosNaoPreenchidos = ValidarDadosFilme(request);
+            bool listaFilmesContemDadosObrigatoriosNaoPreenchidos = ValidarDadosFilme(request);
 
-            if (filmesComDadosObrigatoriosNaoPreenchidos.Any())
-                throw new ValidationException(filmesComDadosObrigatoriosNaoPreenchidos, "O seu request possui erros de validação. Alguns dados obrigatórios não estão preenchidos. Favor verificar.");
+            if (listaFilmesContemDadosObrigatoriosNaoPreenchidos)
+                throw new ValidationException("O seu request possui erros de validação, pois alguns dados obrigatórios não estão preenchidos. Favor verificar.");
+
+            var filmesComDadosInvalidos = ValidarDadosPreenchidos(request);
+
+            if (filmesComDadosInvalidos)
+                throw new ValidationException("O seu request possui erros de validação, pois alguns dados obrigatórios estão preenchidos de forma inválida.");
         }
+
+        #region Validação Obrigatoria dos Dados presente na lista de filmes do request.
 
         /// <summary>
         /// Verifica se algum dado na coleção de filmes a serem persistidos não foi preenchido. Caso se confirme, uma lista com elementos que possuem um dado inválido será criada.
         /// </summary>
         /// <param name="request"></param>
-        /// <returns></returns>
-        private List<FilmesFromDTO> ValidarDadosFilme(SalvarFilmesEmLoteRequestDTO request)
+        /// <returns>Uma lista com componentes que possuem campos obrigatórios não preenchidos.</returns>
+        private bool ValidarDadosFilme(SalvarFilmesEmLoteRequestDTO request)
         {
 
-            List<FilmesFromDTO> filmesComDadosObrigatoriosNaoPreenchidos = request.Filmes.Where(filme =>
+            var filmesComDadosObrigatoriosNaoPreenchidos = request.Filmes.Exists(filme =>
             {
                 var propriedadesFilmeNaoPossuiValor = string.IsNullOrWhiteSpace(filme.Nome) || !filme.Duracao.HasValue || !filme.Ano.HasValue;
 
@@ -260,11 +267,51 @@ namespace BusinessRulesImpl
                 var filmeComAtoresSemValor = filme.Atores == null || !filme.Atores.Any() || filme.Atores.Exists(ator => string.IsNullOrWhiteSpace(ator.Nome) || !ator.Papel.HasValue);
 
                 return propriedadesFilmeNaoPossuiValor || filmeNaoPossuiEstilo || listaDiretoresSemValor || filmeComAtoresSemValor;
-            }).ToList();
+            });
 
             return filmesComDadosObrigatoriosNaoPreenchidos;
 
         }
+
+        #endregion
+
+        #region Validação do que foi preenchido na lista de filmes
+
+        private bool ValidarDadosPreenchidos(SalvarFilmesEmLoteRequestDTO request)
+        {
+            bool filmesComErroDeValidacao = request.Filmes.Exists(filme =>
+            {
+                var filmesComNomeGrande = filme.Nome.Trim().Length > 60;
+
+                var filmeComDuracaoForaDoEsperado = filme.Duracao.Value is < 60 or > 240;
+
+                var filmeComAnoForaDoRange = filme.Ano.Value is < 1900 or > 3000;
+
+                var filmeComDescricaoGrande = filme.Estilo.Descricao.Length is > 50;
+
+                var dadosAtoresOuDiretoresInvalidos = ValidarDadosAtoresEDiretores(filme);
+
+                return filmesComNomeGrande || filmeComDuracaoForaDoEsperado || filmeComAnoForaDoRange || filmeComDescricaoGrande || dadosAtoresOuDiretoresInvalidos;
+            });
+
+            return filmesComErroDeValidacao;
+
+        }
+
+        private bool ValidarDadosAtoresEDiretores(FilmesFromDTO filme)
+        {
+            bool dadosAtoresInvalidos = ValidarDadosAtores(filme.Atores);
+            bool dadosDiretoresInvalidos = ValidarDadosDiretores(filme.Diretores);
+
+            return dadosAtoresInvalidos || dadosDiretoresInvalidos;
+        }
+
+        private bool ValidarDadosAtores(List<Ator> atores) => atores.Exists(ator => ator.Nome.Length > 100 || !Enum.IsDefined(typeof(Papel), ator.Papel.Value));
+
+        private bool ValidarDadosDiretores(List<Diretor> diretores) => diretores.Exists(diretor => diretor.Nome.Length > 100);
+
+        #endregion
+
 
         #endregion
 

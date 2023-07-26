@@ -8,8 +8,6 @@ namespace Models.ErrorObject
         public string Campo { get; internal set; }
         public string DescricaoMensagem { get; internal set; }
 
-
-
         public Erro(string descricaoMensagem)
         {
             DescricaoMensagem = descricaoMensagem;
