@@ -8,5 +8,11 @@ namespace Models.DTOs.Objects
         public string Nome { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Papel? Papel { get; set; }
+
+        public Ator(string nome, Papel? papel)
+        {
+            Nome = nome;
+            Papel = papel;
+        }
     }
 }
