@@ -45,7 +45,7 @@ jobs:
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       
       - name: Restore Packages
-        run: dotnet-restore
+        run: dotnet restore
       
       - name: Build
         run: dotnet build
