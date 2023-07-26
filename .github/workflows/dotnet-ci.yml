@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: CI Steps - .NET
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Get .NET
         uses: actions/setup-dotnet@v3
@@ -39,7 +39,7 @@ jobs:
       #    restore-keys: ${{ runner.os }}-sonar-scanner
           
       - name: Install SonarCloud scanner
-        shell: powershell
+        shell: bash
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
@@ -67,7 +67,7 @@ jobs:
           thresholds: '60 80'
 
       - name: Restore Packages, Build and Analyse Code
-        shell: powershell
+        shell: bash
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"${{ vars.SONAR_PROJECT }}" /o:"${{ vars.SONAR_ORGANIZATION }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ vars.SONAR_HOST_URL }}"
           dotnet restore
