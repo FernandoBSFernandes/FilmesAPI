@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: CI Steps - .NET
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Get .NET
         uses: actions/setup-dotnet@v3
@@ -39,35 +39,22 @@ jobs:
       #    restore-keys: ${{ runner.os }}-sonar-scanner
           
       - name: Install SonarCloud scanner
-        shell: bash
+        shell: powershell
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       
-      - name: Restore Packages
-        run: dotnet restore
-      
       - name: Build
         run: dotnet build
 
-      - name: Test
-        run: dotnet test --collect:"XPlat Code Coverage" --results-directory ./coverage
+      - name: Run tests and calculate code coverage
+        run: dotnet test --collect:"XPlat Code Coverage" -- DataCollectorConfigurationFormat=JSON
 
-      - name: Code Coverage Report
-        uses: irongut/CodeCoverageSummary@v1.3.0
-        with:
-          filename: coverage/**/coverage.cobertura.xml
-          badge: true
-          fail_below_min: true
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-          thresholds: '60 80'
+      - name: Upload code coverage report to Codecov
+        uses: codecov/codecov-action@v2
 
       - name: Restore Packages, Build and Analyse Code
-        shell: bash
+        shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"${{ vars.SONAR_PROJECT }}" /o:"${{ vars.SONAR_ORGANIZATION }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ vars.SONAR_HOST_URL }}"
           dotnet restore
