@@ -38,21 +38,19 @@ jobs:
       #    key: ${{ runner.os }}-sonar-scanner
       #    restore-keys: ${{ runner.os }}-sonar-scanner
           
+      
+      - name: Build
+        run: dotnet build
+
+      - name: Run tests
+        run: dotnet test
+      
       - name: Install SonarCloud scanner
         shell: powershell
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       
-      - name: Build
-        run: dotnet build
-
-      - name: Run tests and calculate code coverage
-        run: dotnet test --collect:"XPlat Code Coverage" -- DataCollectorConfigurationFormat=JSON
-
-      - name: Upload code coverage report to Codecov
-        uses: codecov/codecov-action@v2
-
       - name: Restore Packages, Build and Analyse Code
         shell: powershell
         run: |
