@@ -12,7 +12,7 @@ namespace Models.DTOs.Objects
         public List<Ator>? Atores { get; set; }
         public List<Diretor>? Diretores { get; set; }
 
-        public Filme(string? nome, int? duracao, int? ano, EstiloFilme? estilo, List<Ator>? atores, List<Diretor>? diretores)
+        public Filme(string? nome, int? duracao, int? ano, EstiloFilme estilo, List<Ator> atores, List<Diretor> diretores)
         {
             Nome = nome;
             Duracao = duracao;

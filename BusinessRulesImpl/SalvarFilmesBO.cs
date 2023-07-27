@@ -89,7 +89,7 @@ namespace BusinessRulesImpl
                 erros.Add(new Erro("dadosFilme.ano", "Campo Obrigatório."));
 
             if (request.DadosFilme.Estilo == null)
-                erros.Add(new Erro("dadosFilme.Estilo", "Instancie um estilo para o filme."));
+                erros.Add(new Erro("dadosFilme.estilo", "Instancie um estilo para o filme."));
 
             else if (string.IsNullOrWhiteSpace(request.DadosFilme.Estilo.Descricao))
                 erros.Add(new Erro("dadosFilme.estilo.descricao", "Campo obrigatório."));

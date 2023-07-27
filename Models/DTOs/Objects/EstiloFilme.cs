@@ -2,7 +2,7 @@
 {
     public class EstiloFilme
     {
-        public string Descricao { get; internal set; }
+        public string Descricao { get; set; }
 
         public EstiloFilme(string descricao)
         {

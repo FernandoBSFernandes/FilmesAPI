@@ -1,4 +1,6 @@
-﻿namespace FilmeTest
+﻿using FilmeTest.Profiles;
+
+namespace FilmeTest
 {
     public static class TestesStartup
     {
@@ -15,7 +17,7 @@
             services.AddSingleton(context);
 
             //Adding AutoMapper
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(typeof(FilmeProfile));
 
             services.AddTransient<ISalvarFilmesBO, SalvarFilmesBO>();
 
