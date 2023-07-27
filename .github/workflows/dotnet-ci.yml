@@ -23,25 +23,21 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
         
-      #- name: Cache SonarCloud packages
-      #  uses: actions/cache@v3
-      #  with:
-      #    path: ~\sonar\cache
-      #    key: ${{ runner.os }}-sonar
-      #    restore-keys: ${{ runner.os }}-sonar
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
           
-      #- name: Cache SonarCloud scanner
-      #  id: cache-sonar-scanner
-      #  uses: actions/cache@v3
-      #  with:
-      #    path: .\.sonar\scanner
-      #    key: ${{ runner.os }}-sonar-scanner
-      #    restore-keys: ${{ runner.os }}-sonar-scanner
+      - name: Cache SonarCloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v3
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
           
-      
-      - name: Build
-        run: dotnet build
-
       - name: Run tests
         run: dotnet test
       
