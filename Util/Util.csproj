@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="ReportGenerator" Version="5.1.23" />
+  </ItemGroup>
+
 </Project>

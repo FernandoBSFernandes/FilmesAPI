@@ -41,7 +41,9 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar-scanner
           
       - name: Run tests
-        run: dotnet test
+        run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+
+
       
       - name: Install SonarCloud scanner
         shell: powershell
